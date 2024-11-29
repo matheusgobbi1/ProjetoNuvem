@@ -14,24 +14,24 @@ router.get('/', protect, asyncHandler(async (req, res) => {
   res.json(result.rows);
 }));
 
-// Create project
+// Create user
 router.post('/', protect, asyncHandler(async (req, res) => {
   const { name, description } = req.body;
 
   const result = await query(
-    'INSERT INTO projects (name, description, user_id) VALUES ($1, $2, $3) RETURNING *',
+    'INSERT INTO users (name, description, user_id) VALUES ($1, $2, $3) RETURNING *',
     [name, description, req.user.id]
   );
 
   res.status(201).json(result.rows[0]);
 }));
 
-// Update project
+// Update user
 router.put('/:id', protect, asyncHandler(async (req, res) => {
   const { name, description } = req.body;
 
   const result = await query(
-    'UPDATE projects SET name = $1, description = $2 WHERE id = $3 AND user_id = $4 RETURNING *',
+    'UPDATE user SET name = $1, description = $2 WHERE id = $3 AND user_id = $4 RETURNING *',
     [name, description, req.params.id, req.user.id]
   );
 
@@ -43,10 +43,10 @@ router.put('/:id', protect, asyncHandler(async (req, res) => {
   res.json(result.rows[0]);
 }));
 
-// Delete project
+// Delete user
 router.delete('/:id', protect, asyncHandler(async (req, res) => {
   const result = await query(
-    'DELETE FROM projects WHERE id = $1 AND user_id = $2 RETURNING *',
+    'DELETE FROM users WHERE id = $1 AND user_id = $2 RETURNING *',
     [req.params.id, req.user.id]
   );
 
